@@ -1,0 +1,110 @@
+Boulder Housing Affordability & Displacement Risk: Predictive Modeling Project Plan
+Research Question
+How can we predict housing affordability trends and quantify neighborhood-level displacement risk in Boulder, Colorado using integrated economic and housing market data?
+Model Overview
+We will develop a hybrid predictive framework consisting of two complementary components:
+Time Series Forecasting Model: Predicts aggregate housing affordability metrics for Boulder 6-12 months ahead using ARIMA/SARIMAX with exogenous economic variables from FRED
+Spatial Risk Model: Assigns displacement risk scores to Boulder neighborhoods using logistic regression with economic stress indicators and housing supply dynamics
+Technical Approach
+Language: Python
+Key Libraries:
+Data: pandas, numpy, fredapi
+Modeling: statsmodels, scikit-learn, prophet
+Spatial: geopandas, folium
+Visualization: matplotlib, seaborn, plotly
+Data Sources:
+FRED API: Denver-Boulder MSA economic indicators (income, employment, CPI-housing)
+Boulder Open Data / County Assessor: Housing prices, construction permits
+US Census Bureau: Demographic data at census tract level
+Why This Matters
+Policy Impact: Boulder city planners need forward-looking tools to anticipate affordability crises and identify vulnerable neighborhoods before displacement occurs.
+Methodological Rigor: By combining time series econometrics with spatial risk modeling, we create a statistically robust framework that is reproducible and audit-ready.
+Equity Considerations: Quantifying displacement risk with transparent metrics allows policymakers to prioritize interventions in communities most at risk, promoting equitable housing outcomes.
+Step-by-Step Implementation Plan
+1. Data Acquisition & Preprocessing
+Set up FRED API access and pull monthly time series (2015-2024) for:
+Median household income (Denver-Boulder MSA)
+Unemployment rate
+CPI for housing
+Employment growth by sector
+Acquire Boulder housing data:
+Median home prices by zip code/census tract
+Construction permits issued (monthly counts)
+Rental vacancy rates if available
+Merge datasets on common temporal and spatial keys
+Handle missing values, outliers, and ensure stationarity for time series components
+2. Feature Engineering
+Calculate derived affordability metrics:
+Price-to-income ratio (housing affordability index)
+Percentage of income required for median mortgage/rent
+Create displacement risk indicators:
+Rolling 12-month price appreciation rate
+Income growth gap (housing price growth - wage growth)
+Supply pressure (new permits / existing housing stock)
+Generate lag features for predictive power (3, 6, 12-month lags)
+Spatial features: distance to Boulder downtown, transit access, proximity to employment centers
+3. Exploratory Data Analysis
+Visualize time trends in housing prices, income, and affordability ratios
+Identify structural breaks (e.g., COVID-19 impact)
+Examine spatial heterogeneity across Boulder neighborhoods
+Correlation analysis between economic indicators and housing metrics
+Test for stationarity using ADF/KPSS tests
+4. Model Development - Time Series Component
+Train ARIMA/SARIMAX model for Boulder aggregate housing affordability index
+Include exogenous variables: unemployment rate, CPI-housing, construction permits
+Perform grid search for optimal (p, d, q) parameters
+Validate using rolling window cross-validation (train on 2015-2022, test on 2023-2024)
+Generate 6-month and 12-month ahead forecasts with confidence intervals
+5. Model Development - Spatial Risk Component
+Define displacement risk binary outcome:
+"High risk" = neighborhoods where price growth >15% AND income growth <5% over past 12 months
+Train logistic regression model with features:
+Economic stress (unemployment × price appreciation)
+Supply constraints (low construction activity)
+Demographic vulnerability (if census data available)
+Use cross-validation to tune regularization parameters
+Generate predicted probabilities for each Boulder census tract
+6. Model Validation & Diagnostics
+Time series model: Check residuals for autocorrelation, normality, heteroskedasticity
+Spatial model: ROC curve, precision-recall, calibration plots
+Sensitivity analysis: How do predictions change with ±10% shifts in key assumptions?
+Out-of-sample performance metrics: RMSE, MAE for time series; AUC, F1-score for classification
+7. Assurance Dossier Construction
+Technical Documentation: Jupyter notebook with full reproducible workflow
+Statistical Report: LaTeX document covering methodology, validation, limitations
+Data Provenance: Clear documentation of all data sources, transformations, and assumptions
+Bias & Ethics Assessment:
+Identify potential biases in data (e.g., missing data on informal housing)
+Discuss who might be harmed by model predictions
+Propose mitigation strategies (e.g., human-in-the-loop for policy decisions)
+Interactive Dashboard: Plotly/Streamlit app showing forecasts and risk maps
+8. Visualization & Communication
+Time series plots: Forecasted affordability trends with confidence bands
+Interactive risk map: Boulder neighborhoods color-coded by displacement risk score
+Comparative metrics: Boulder vs. Denver vs. National averages
+Scenario analysis: "What if" visualizations (e.g., 20% increase in construction permits)
+9. Deliverables
+Python codebase (GitHub repository with clean structure)
+Technical report (15-20 pages, LaTeX)
+Executive summary for policymakers (2-page brief)
+Interactive dashboard for exploration
+Presentation slides summarizing key findings
+Success Criteria
+Time series model achieves RMSE <5% of mean housing affordability index on test set
+Spatial risk model achieves AUC >0.75 for predicting high-risk neighborhoods
+All code is reproducible with clear documentation
+Deliverables are accessible to both technical and non-technical audiences
+Ethical considerations are explicitly documented and addressed
+Timeline Estimate
+Data acquisition & preprocessing: 1 week
+EDA & feature engineering: 1 week
+Model development & validation: 2 weeks
+Assurance dossier & deliverables: 1 week
+Total: 5 weeks for complete project
+Risk Factors & Mitigation
+Risk: Data availability issues for Boulder-specific metrics Mitigation: Use Denver MSA data as proxy; supplement with Zillow or Redfin APIs
+Risk: Model overfitting on limited Boulder data Mitigation: Use regularization; consider pooling with similar-sized Colorado cities
+Risk: Ethical concerns about perpetuating displacement through prediction Mitigation: Frame model as early warning system for intervention, not deterministic forecast
+Next Immediate Action
+Set up Python environment and pull initial FRED data for Denver-Boulder MSA to validate data availability and structure.
+
